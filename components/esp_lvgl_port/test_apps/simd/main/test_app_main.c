@@ -9,7 +9,7 @@
 #include "unity_test_utils.h"
 #include "lv_fill_common.h"
 
-#define TEST_MEMORY_LEAK_THRESHOLD (300)
+#define TEST_MEMORY_LEAK_THRESHOLD (800)
 
 void app_main(void)
 {

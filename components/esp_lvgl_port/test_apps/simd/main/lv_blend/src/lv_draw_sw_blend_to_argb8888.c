@@ -243,7 +243,9 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_sw_blend_color_to_argb8888(_lv_draw_sw_blend_
     }
     /*Opacity only*/
     else if (mask == NULL && opa < LV_OPA_MAX) {
-        if (LV_RESULT_INVALID == LV_DRAW_SW_COLOR_BLEND_TO_ARGB8888_WITH_OPA(dsc)) {
+        if (dsc->use_asm) {
+            LV_DRAW_SW_COLOR_BLEND_TO_ARGB8888_WITH_OPA(dsc);
+        } else {
             lv_color32_t color_argb = lv_color_to_32(dsc->color, opa);
             lv_color32_t *dest_buf = dsc->dest_buf;
 

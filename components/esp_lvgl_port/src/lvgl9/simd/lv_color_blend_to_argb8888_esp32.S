@@ -9,6 +9,7 @@
     .section .text
     .align  4
     .global lv_color_blend_to_argb8888_esp
+    .global .lv_color_blend_to_argb8888_esp_body
     .type   lv_color_blend_to_argb8888_esp,@function
 
 // The function implements the following C code:
@@ -44,6 +45,8 @@ lv_color_blend_to_argb8888_esp:
 
     movi     a7,    0xff000000                  // oppactiy mask
     or       a10,    a7,    a8                  // apply oppacity
+
+    .lv_color_blend_to_argb8888_esp_body:       // label for jumping from other asm files
 
     srli    a9,    a4,   2                      // a9 - loop_len = dest_w / 4
     sub     a6,    a6,   a11                    // dest_stride = dest_stride - dest_w_bytes

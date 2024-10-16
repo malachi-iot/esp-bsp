@@ -9,6 +9,7 @@
     .section .text
     .align  4
     .global lv_color_blend_to_argb8888_esp
+    .global .lv_color_blend_to_argb8888_esp_body
     .type   lv_color_blend_to_argb8888_esp,@function
 // The function implements the following C code:
 // void lv_color_blend_to_argb8888(_lv_draw_sw_blend_fill_dsc_t * dsc);
@@ -46,10 +47,12 @@ lv_color_blend_to_argb8888_esp:
     movi     a7,    0xff000000                  // oppactiy mask
     or       a10,    a7,    a8                  // apply oppacity
 
+    .lv_color_blend_to_argb8888_esp_body:       // label for jumping from other asm files
+
     // Check for short lengths
     // dest_w should be at least 8, othewise it's not worth using esp32s3 TIE
     bgei     a4,   8,  _esp32s3_implementation          // Branch if dest_w is greater than or equal to 8
-    j .lv_color_blend_to_argb8888_esp32_body            // Jump to esp32 implementation
+    j .lv_color_blend_to_argb8888_esp32_impl            // Jump to esp32 implementation
 
     _esp32s3_implementation:
 
@@ -288,7 +291,7 @@ lv_color_blend_to_argb8888_esp:
     movi.n   a2, 1                                      // return LV_RESULT_OK = 1
     retw.n                                              // return
 
-    .lv_color_blend_to_argb8888_esp32_body:
+    .lv_color_blend_to_argb8888_esp32_impl:
 
     srli    a9,    a4,   2                              // a9 - loop_len = dest_w / 4
     sub     a6,    a6,   a11                            // dest_stride = dest_stride - dest_w_bytes
