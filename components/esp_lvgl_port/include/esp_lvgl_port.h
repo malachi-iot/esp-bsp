@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2022-2024 Espressif Systems (Shanghai) CO LTD
+ * SPDX-FileCopyrightText: 2022-2025 Espressif Systems (Shanghai) CO LTD
  *
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -31,9 +31,9 @@ extern "C" {
  * @brief LVGL Port task event type
  */
 typedef enum {
-    LVGL_PORT_EVENT_DISPLAY = 1,
-    LVGL_PORT_EVENT_TOUCH   = 2,
-    LVGL_PORT_EVENT_USER    = 99,
+    LVGL_PORT_EVENT_DISPLAY = 0x01,
+    LVGL_PORT_EVENT_TOUCH   = 0x02,
+    LVGL_PORT_EVENT_USER    = 0x80,
 } lvgl_port_event_type_t;
 
 /**
