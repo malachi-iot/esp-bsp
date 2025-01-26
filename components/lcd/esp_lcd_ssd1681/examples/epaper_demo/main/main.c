@@ -126,12 +126,12 @@ void app_main(void)
     epaper_panel_semaphore = xSemaphoreCreateBinary();
     xSemaphoreGive(epaper_panel_semaphore);
     // --- Clear the VRAM of RED and BLACK
-    uint8_t *empty_bitmap = heap_caps_malloc(EXAMPLE_WIDTH * EXAMPLE_HEIGHT / 8, MALLOC_CAP_DMA);
-    memset(empty_bitmap, 0, EXAMPLE_WIDTH * EXAMPLE_HEIGHT / 8);
+    uint8_t *empty_bitmap = heap_caps_malloc(SSD168X_WIDTH * SSD168X_HEIGHT / 8, MALLOC_CAP_DMA);
+    memset(empty_bitmap, 0, SSD168X_WIDTH * SSD168X_HEIGHT / 8);
     epaper_panel_set_bitmap_color(panel_handle, SSD1681_EPAPER_BITMAP_RED);
-    esp_lcd_panel_draw_bitmap(panel_handle, 0, 0, EXAMPLE_WIDTH, EXAMPLE_HEIGHT, empty_bitmap);
+    esp_lcd_panel_draw_bitmap(panel_handle, 0, 0, SSD168X_WIDTH, SSD168X_HEIGHT, empty_bitmap);
     epaper_panel_set_bitmap_color(panel_handle, SSD1681_EPAPER_BITMAP_BLACK);
-    esp_lcd_panel_draw_bitmap(panel_handle, 0, 0, EXAMPLE_WIDTH, EXAMPLE_HEIGHT, empty_bitmap);
+    esp_lcd_panel_draw_bitmap(panel_handle, 0, 0, SSD168X_WIDTH, SSD168X_HEIGHT, empty_bitmap);
 
     // --- Register the e-Paper refresh done callback
     // cbs does not have to be static for ssd1681 driver, for the callback ptr is copied, not pointed
@@ -140,7 +140,7 @@ void app_main(void)
     };
     epaper_panel_register_event_callbacks(panel_handle, &cbs, &epaper_panel_semaphore);
 
-#if EXAMPLE_WIDTH >= 200 && EXAMPLE_HEIGHT >= 200
+#if SSD168X_WIDTH >= 200 && SSD168X_HEIGHT >= 200
     // --- Draw full-screen bitmap
     ESP_LOGI(TAG, "Drawing bitmap...");
     ESP_LOGI(TAG, "Show image full-screen");

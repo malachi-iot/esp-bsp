@@ -14,7 +14,8 @@
 #define SSD1681_CMD_SWRST                   0x12
 // --- Driver output control
 #define SSD1681_CMD_OUTPUT_CTRL             0x01
-#define SSD1680_PARAM_OUTPUT_CTRL           ((uint8_t[]) {0x27, 0x01, 0x00})    // 295
+//#define SSD1680_PARAM_OUTPUT_CTRL           ((uint8_t[]) {0x27, 0x01, 0x00})    // 295
+#define SSD1680_PARAM_OUTPUT_CTRL           ((uint8_t[]) {0xf9, 0x00, 0x00})    // 249
 #define SSD1681_PARAM_OUTPUT_CTRL           ((uint8_t[]) {0xc7, 0x00, 0x00})    // 199
 // --- Data Entry Sequence Setting
 #define SSD1681_CMD_DATA_ENTRY_MODE         0x11

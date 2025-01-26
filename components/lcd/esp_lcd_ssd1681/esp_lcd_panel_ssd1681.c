@@ -25,20 +25,6 @@
 
 #define SSD1681_LUT_SIZE                   159
 
-#define SSD1680_WIDTH                       176
-#define SSD1680_HEIGHT                      296
-#define SSD1681_WIDTH                       200
-#define SSD1681_HEIGHT                      200
-
-#if CONFIG_ESP_LCD_PANEL_SSD1680
-#define SSD168X_WIDTH   SSD1680_WIDTH
-#define SSD168X_HEIGHT  SSD1680_HEIGHT
-#else
-#define SSD168X_WIDTH   SSD1681_WIDTH
-#define SSD168X_HEIGHT  SSD1681_HEIGHT
-#endif
-
-
 static const char *TAG = "lcd_panel.epaper";
 
 typedef struct {
@@ -394,11 +380,15 @@ static esp_err_t epaper_panel_init(esp_lcd_panel_t *panel)
     panel_epaper_wait_busy(panel);
     // --- Driver Output Control
     ESP_RETURN_ON_ERROR(esp_lcd_panel_io_tx_param(epaper_panel->io, SSD1681_CMD_OUTPUT_CTRL,
-#if CONFIG_ESP_LCD_PANEL_SSD1680
+    // 26JAN25 MB TODO: This really needs to hang off resolution, not chipset or even target
+#if CONFIG_EPD_CHIPSET_SSD1680
                         SSD1680_PARAM_OUTPUT_CTRL, 3), TAG, "SSD1681_CMD_OUTPUT_CTRL err");
 #else
                         SSD1681_PARAM_OUTPUT_CTRL, 3), TAG, "SSD1681_CMD_OUTPUT_CTRL err");
 #endif
+
+    // 26JAN25 MB NOTE: Doesn't seem to make any difference
+    //epaper_set_area(io, 0, 0, SSD168X_WIDTH, SSD168X_HEIGHT);
 
     // --- Border Waveform Control
     ESP_RETURN_ON_ERROR(esp_lcd_panel_io_tx_param(epaper_panel->io, SSD1681_CMD_SET_BORDER_WAVEFORM, (uint8_t[]) {

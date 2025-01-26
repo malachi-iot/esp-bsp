@@ -2,14 +2,45 @@ menu "SSD1681"
 
     choice
         prompt "Chipset"
-        default ESP_LCD_PANEL_SSD1681
+        default EPD_CHIPSET_SSD1681
 
-        config ESP_LCD_PANEL_SSD1680
+        config EPD_CHIPSET_SSD1680
             bool "SSD1680"
 
-        config ESP_LCD_PANEL_SSD1681
+        config EPD_CHIPSET_SSD1681
             bool "SSD1681"
 
     endchoice
+
+    choice
+        prompt "Target"
+        default BOARD_WAVESHARE
+
+        if EPD_CHIPSET_SSD1681
+            config BOARD_WAVESHARE
+                bool "Waveshare 1.54 inch v2"
+        endif
+
+        if EPD_CHIPSET_SSD1680
+            config BOARD_CROWPANEL
+                bool "CrowPanel 2.13 inch"
+        endif
+
+        config BOARD_CUSTOM
+            bool "Custom"
+
+    endchoice
+
+
+    if BOARD_CUSTOM
+        config EPD_WIDTH
+            int "Resolution width"
+            default 0
+
+        config EPD_HEIGHT
+            int "Resolution height"
+            default 0
+    endif
+
 
 endmenu

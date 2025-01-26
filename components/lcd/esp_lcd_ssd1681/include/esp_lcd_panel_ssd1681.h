@@ -14,6 +14,26 @@
 extern "C" {
 #endif
 
+
+// Maximums
+#define SSD1680_WIDTH                       176
+#define SSD1680_HEIGHT                      296
+#define SSD1681_WIDTH                       200
+#define SSD1681_HEIGHT                      200
+
+#if CONFIG_BOARD_WAVESHARE
+#define SSD168X_WIDTH   200
+#define SSD168X_HEIGHT  200
+#elif CONFIG_BOARD_CROWPANEL
+#define SSD168X_WIDTH   122
+#define SSD168X_HEIGHT  250
+#elif CONFIG_BOARD_CUSTOM
+#define SSD168X_WIDTH   CONFIG_EPD_WIDTH
+#define SSD168X_HEIGHT  CONFIG_EPD_HEIGHT
+#endif
+
+
+
 /**
 * @brief Prototype of ssd1681 driver event callback
 *
