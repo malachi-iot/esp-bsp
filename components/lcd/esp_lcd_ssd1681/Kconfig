@@ -1,0 +1,15 @@
+menu "SSD1681"
+
+    choice
+        prompt "Chipset"
+        default ESP_LCD_PANEL_SSD1681
+
+        config ESP_LCD_PANEL_SSD1680
+            bool "SSD1680"
+
+        config ESP_LCD_PANEL_SSD1681
+            bool "SSD1681"
+
+    endchoice
+
+endmenu

@@ -20,6 +20,7 @@
 
 #include "ssd1681_waveshare_1in54_lut.h"
 #include "img_bitmap.h"
+#include "config.h"
 
 // SPI Bus
 #define EPD_PANEL_SPI_CLK           1000000
@@ -27,13 +28,13 @@
 #define EPD_PANEL_SPI_PARAM_BITS    8
 #define EPD_PANEL_SPI_MODE          0
 // e-Paper GPIO
-#define EXAMPLE_PIN_NUM_EPD_DC      9
-#define EXAMPLE_PIN_NUM_EPD_RST     4
-#define EXAMPLE_PIN_NUM_EPD_CS      10
-#define EXAMPLE_PIN_NUM_EPD_BUSY    18
+#define EXAMPLE_PIN_NUM_EPD_DC      CONFIG_PIN_NUM_EPD_DC
+#define EXAMPLE_PIN_NUM_EPD_RST     CONFIG_PIN_NUM_EPD_RST
+#define EXAMPLE_PIN_NUM_EPD_CS      CONFIG_PIN_NUM_EPD_CS
+#define EXAMPLE_PIN_NUM_EPD_BUSY    CONFIG_PIN_NUM_EPD_BUSY
 // e-Paper SPI
-#define EXAMPLE_PIN_NUM_MOSI        7
-#define EXAMPLE_PIN_NUM_SCLK        6
+#define EXAMPLE_PIN_NUM_MOSI        CONFIG_PIN_NUM_EPD_MOSI
+#define EXAMPLE_PIN_NUM_SCLK        CONFIG_PIN_NUM_EPD_SCLK
 
 static const char *TAG = "epaper_demo_plain";
 
@@ -52,6 +53,10 @@ static bool give_semaphore_in_isr(const esp_lcd_panel_handle_t handle, const voi
 void app_main(void)
 {
     esp_err_t ret;
+#if CONFIG_BOARD_CROWPANEL
+    gpio_set_direction((gpio_num_t)EPD_PANEL_POWER, GPIO_MODE_OUTPUT);
+    gpio_set_level((gpio_num_t)EPD_PANEL_POWER, 1);
+#endif
     // --- Init SPI Bus
     ESP_LOGI(TAG, "Initializing SPI Bus...");
     spi_bus_config_t buscfg = {
@@ -121,12 +126,12 @@ void app_main(void)
     epaper_panel_semaphore = xSemaphoreCreateBinary();
     xSemaphoreGive(epaper_panel_semaphore);
     // --- Clear the VRAM of RED and BLACK
-    uint8_t *empty_bitmap = heap_caps_malloc(200 * 200 / 8, MALLOC_CAP_DMA);
-    memset(empty_bitmap, 0, 200 * 200 / 8);
+    uint8_t *empty_bitmap = heap_caps_malloc(EXAMPLE_WIDTH * EXAMPLE_HEIGHT / 8, MALLOC_CAP_DMA);
+    memset(empty_bitmap, 0, EXAMPLE_WIDTH * EXAMPLE_HEIGHT / 8);
     epaper_panel_set_bitmap_color(panel_handle, SSD1681_EPAPER_BITMAP_RED);
-    esp_lcd_panel_draw_bitmap(panel_handle, 0, 0, 200, 200, empty_bitmap);
+    esp_lcd_panel_draw_bitmap(panel_handle, 0, 0, EXAMPLE_WIDTH, EXAMPLE_HEIGHT, empty_bitmap);
     epaper_panel_set_bitmap_color(panel_handle, SSD1681_EPAPER_BITMAP_BLACK);
-    esp_lcd_panel_draw_bitmap(panel_handle, 0, 0, 200, 200, empty_bitmap);
+    esp_lcd_panel_draw_bitmap(panel_handle, 0, 0, EXAMPLE_WIDTH, EXAMPLE_HEIGHT, empty_bitmap);
 
     // --- Register the e-Paper refresh done callback
     // cbs does not have to be static for ssd1681 driver, for the callback ptr is copied, not pointed
@@ -135,6 +140,7 @@ void app_main(void)
     };
     epaper_panel_register_event_callbacks(panel_handle, &cbs, &epaper_panel_semaphore);
 
+#if EXAMPLE_WIDTH >= 200 && EXAMPLE_HEIGHT >= 200
     // --- Draw full-screen bitmap
     ESP_LOGI(TAG, "Drawing bitmap...");
     ESP_LOGI(TAG, "Show image full-screen");
@@ -202,6 +208,7 @@ void app_main(void)
     ESP_LOGI(TAG, "Drawing bitmap...");
     ESP_ERROR_CHECK(esp_lcd_panel_draw_bitmap(panel_handle, 0, 0, 200, 200, BITMAP_200_200));
     ESP_ERROR_CHECK(epaper_panel_refresh_screen(panel_handle));
+#endif
 
     vTaskDelay(pdMS_TO_TICKS(5000));
     ESP_LOGI(TAG, "Go to sleep mode...");

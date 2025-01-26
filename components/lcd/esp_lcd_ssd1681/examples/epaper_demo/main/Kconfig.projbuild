@@ -1,0 +1,78 @@
+menu "SSD1681 demo"
+
+    choice
+        prompt "target"
+        default BOARD_WAVESHARE
+
+        config BOARD_WAVESHARE
+            bool "Waveshare v2"
+
+        config BOARD_CROWPANEL
+            bool "CrowPanel 2.13inch"
+            help
+                Be sure to also specify SSD1680 in component config
+
+        config BOARD_CUSTOM
+            bool "Custom"
+
+    endchoice
+
+    if !BOARD_CUSTOM
+        config PIN_NUM_EPD_DC
+            int
+            default 9 if BOARD_WAVESHARE
+            default 13 if BOARD_CROWPANEL
+
+        config PIN_NUM_EPD_RST
+            int
+            default 4 if BOARD_WAVESHARE
+            default 10 if BOARD_CROWPANEL
+
+        config PIN_NUM_EPD_CS
+            int
+            default 10 if BOARD_WAVESHARE
+            default 14 if BOARD_CROWPANEL
+
+        config PIN_NUM_EPD_BUSY
+            int
+            default 18 if BOARD_WAVESHARE
+            default 9 if BOARD_CROWPANEL
+
+        config PIN_NUM_EPD_MOSI
+            int
+            default 7 if BOARD_WAVESHARE
+            default 11 if BOARD_CROWPANEL
+                
+        config PIN_NUM_EPD_SCLK
+            int
+            default 6 if BOARD_WAVESHARE
+            default 12 if BOARD_CROWPANEL
+    endif
+
+    if BOARD_CUSTOM
+        config PIN_NUM_EPD_DC
+            int "DC pin"
+        
+        config PIN_NUM_EPD_RST
+            int "Reset pin"
+
+        config PIN_NUM_EPD_CS
+            int "CS pin"
+
+        config PIN_NUM_EPD_BUSY
+            int "BUSY pin"
+
+        config PIN_NUM_EPD_MOSI
+            int "SPI MOSI"
+
+        config PIN_NUM_EPD_SCLK
+            int "SPI SCLK"
+
+        config EPD_WIDTH
+            int "Resolution width"
+
+        config EPD_HEIGHT
+            int "Resolution height"
+    endif
+
+endmenu

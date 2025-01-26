@@ -27,6 +27,19 @@
 #define SSD1681_EPD_1IN54_V2_WIDTH         200
 #define SSD1681_EPD_1IN54_V2_HEIGHT        200
 
+#define SSD1680_WIDTH                       176
+#define SSD1680_HEIGHT                      296
+#define SSD1681_WIDTH                       200
+#define SSD1681_HEIGHT                      200
+
+#if ESP_LCD_PANEL_SSD1680
+#define SSD168X_WIDTH   SSD1680_WIDTH
+#define SSD168X_HEIGHT  SSD1680_HEIGHT
+#else
+#define SSD168X_WIDTH   SSD1681_WIDTH
+#define SSD168X_HEIGHT  SSD1681_HEIGHT
+#endif
+
 
 static const char *TAG = "lcd_panel.epaper";
 
