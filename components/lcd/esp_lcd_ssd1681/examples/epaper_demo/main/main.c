@@ -144,6 +144,9 @@ void app_main(void)
     };
     epaper_panel_register_event_callbacks(panel_handle, &cbs, &epaper_panel_semaphore);
 
+    // 26JAN25 MB FIX - Corrupts image rendering
+    //esp_lcd_panel_set_gap(panel_handle, 10, 10);
+
 #if SSD168X_WIDTH >= 200 && SSD168X_HEIGHT >= 200
     // --- Draw full-screen bitmap
     ESP_LOGI(TAG, "Drawing bitmap...");
@@ -211,6 +214,11 @@ void app_main(void)
     ESP_ERROR_CHECK(esp_lcd_panel_swap_xy(panel_handle, true));
     ESP_LOGI(TAG, "Drawing bitmap...");
     ESP_ERROR_CHECK(esp_lcd_panel_draw_bitmap(panel_handle, 0, 0, 200, 200, BITMAP_200_200));
+    ESP_ERROR_CHECK(epaper_panel_refresh_screen(panel_handle));
+#else
+    // If not doing full screen tests, still take this opportunity to draw
+    // the empty/cleared bitmap
+    xSemaphoreTake(epaper_panel_semaphore, portMAX_DELAY);
     ESP_ERROR_CHECK(epaper_panel_refresh_screen(panel_handle));
 #endif
 

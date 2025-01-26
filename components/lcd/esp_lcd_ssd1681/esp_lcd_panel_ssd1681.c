@@ -380,12 +380,7 @@ static esp_err_t epaper_panel_init(esp_lcd_panel_t *panel)
     panel_epaper_wait_busy(panel);
     // --- Driver Output Control
     ESP_RETURN_ON_ERROR(esp_lcd_panel_io_tx_param(epaper_panel->io, SSD1681_CMD_OUTPUT_CTRL,
-    // 26JAN25 MB TODO: This really needs to hang off resolution, not chipset or even target
-#if CONFIG_EPD_CHIPSET_SSD1680
-                        SSD1680_PARAM_OUTPUT_CTRL, 3), TAG, "SSD1681_CMD_OUTPUT_CTRL err");
-#else
-                        SSD1681_PARAM_OUTPUT_CTRL, 3), TAG, "SSD1681_CMD_OUTPUT_CTRL err");
-#endif
+                        SSD1681_PARAM_OUTPUT_CTRL(SSD168X_HEIGHT - 1), 3), TAG, "SSD1681_CMD_OUTPUT_CTRL err");
 
     // 26JAN25 MB NOTE: Added based on datasheet - MAY have made a difference
     // for clearing out ghosting on startup
