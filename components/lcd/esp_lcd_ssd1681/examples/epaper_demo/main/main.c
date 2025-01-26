@@ -56,6 +56,10 @@ void app_main(void)
 #if CONFIG_BOARD_CROWPANEL
     gpio_set_direction((gpio_num_t)EPD_PANEL_POWER, GPIO_MODE_OUTPUT);
     gpio_set_level((gpio_num_t)EPD_PANEL_POWER, 1);
+    // DEBT: Delay almost definitely not truly required here, just following
+    // letter of the datasheet law
+    // https://www.elecrow.com/download/product/DIE01021S/SSD1680_Datasheet.pdf p. 39
+    vTaskDelay(pdMS_TO_TICKS(10));
 #endif
     // --- Init SPI Bus
     ESP_LOGI(TAG, "Initializing SPI Bus...");
@@ -210,6 +214,7 @@ void app_main(void)
     ESP_ERROR_CHECK(epaper_panel_refresh_screen(panel_handle));
 #endif
 
+#if CONFIG_EXAMPLE_SLEEP
     vTaskDelay(pdMS_TO_TICKS(5000));
     ESP_LOGI(TAG, "Go to sleep mode...");
     esp_lcd_panel_disp_on_off(panel_handle, false);
@@ -221,6 +226,7 @@ void app_main(void)
     vTaskDelay(100 / portTICK_PERIOD_MS);
     esp_lcd_panel_disp_on_off(panel_handle, true);
     vTaskDelay(100 / portTICK_PERIOD_MS);
+#endif
 
     // NOTE: If you want to use a custom LUT, you'll have to set it again after resume
     // --- Draw partial bitmap

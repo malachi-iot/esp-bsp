@@ -1,5 +1,12 @@
 menu "SSD1681 demo"
 
+    config EXAMPLE_SLEEP
+        bool "Put display (but not MCU itself) to sleep during test"
+        default y
+        help
+            Display always goes to sleep at end of test
+            This flag indicates to sleep the display inbetween full and partial render tests
+
     if !BOARD_CUSTOM
         config PIN_NUM_EPD_DC
             int

@@ -387,8 +387,14 @@ static esp_err_t epaper_panel_init(esp_lcd_panel_t *panel)
                         SSD1681_PARAM_OUTPUT_CTRL, 3), TAG, "SSD1681_CMD_OUTPUT_CTRL err");
 #endif
 
+    // 26JAN25 MB NOTE: Added based on datasheet - MAY have made a difference
+    // for clearing out ghosting on startup
+    ESP_RETURN_ON_ERROR(esp_lcd_panel_io_tx_param(io, SSD1681_CMD_DATA_ENTRY_MODE, (uint8_t[]) {
+        SSD1681_PARAM_DATA_ENTRY_MODE_3
+    }, 1), TAG, "SSD1681_CMD_DATA_ENTRY_MODE err");
+
     // 26JAN25 MB NOTE: Doesn't seem to make any difference
-    //epaper_set_area(io, 0, 0, SSD168X_WIDTH, SSD168X_HEIGHT);
+    epaper_set_area(io, 0, 0, SSD168X_WIDTH, SSD168X_HEIGHT);
 
     // --- Border Waveform Control
     ESP_RETURN_ON_ERROR(esp_lcd_panel_io_tx_param(epaper_panel->io, SSD1681_CMD_SET_BORDER_WAVEFORM, (uint8_t[]) {
@@ -399,6 +405,7 @@ static esp_err_t epaper_panel_init(esp_lcd_panel_t *panel)
     ESP_RETURN_ON_ERROR(esp_lcd_panel_io_tx_param(epaper_panel->io, SSD1681_CMD_SET_TEMP_SENSOR, (uint8_t[]) {
         SSD1681_PARAM_TEMP_SENSOR
     }, 1), TAG, "SSD1681_CMD_SET_TEMP_SENSOR err");
+
     // --- Load built-in waveform LUT
     ESP_RETURN_ON_ERROR(esp_lcd_panel_io_tx_param(epaper_panel->io, SSD1681_CMD_SET_DISP_UPDATE_CTRL, (uint8_t[]) {
         SSD1681_PARAM_DISP_UPDATE_MODE_1
