@@ -26,6 +26,8 @@ extern "C" {
 #define SSD168X_HEIGHT  200
 #elif CONFIG_BOARD_CROWPANEL
 #define SSD168X_WIDTH   122
+// 26JAN25 MB DEBT: Product data indicates 250px, but so far it's behaving
+// as if it was 264.  Needs more attention
 #define SSD168X_HEIGHT  264
 #elif CONFIG_BOARD_CUSTOM
 #define SSD168X_WIDTH   CONFIG_EPD_WIDTH

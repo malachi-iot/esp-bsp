@@ -388,8 +388,9 @@ static esp_err_t epaper_panel_init(esp_lcd_panel_t *panel)
         SSD1681_PARAM_DATA_ENTRY_MODE_3
     }, 1), TAG, "SSD1681_CMD_DATA_ENTRY_MODE err");
 
-    // 26JAN25 MB NOTE: Doesn't seem to make any difference
-    epaper_set_area(io, 0, 0, SSD168X_WIDTH, SSD168X_HEIGHT);
+    // 26JAN25 MB NOTE: Datasheet calls for this, but doesn't seem to make any
+    // difference on startup (since we call it explicitly for bitmap draw anyway)
+    //epaper_set_area(io, 0, 0, SSD168X_WIDTH, SSD168X_HEIGHT);
 
     // --- Border Waveform Control
     ESP_RETURN_ON_ERROR(esp_lcd_panel_io_tx_param(epaper_panel->io, SSD1681_CMD_SET_BORDER_WAVEFORM, (uint8_t[]) {

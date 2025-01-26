@@ -132,6 +132,7 @@ void app_main(void)
     // --- Clear the VRAM of RED and BLACK
     uint8_t *empty_bitmap = heap_caps_malloc(SSD168X_WIDTH * SSD168X_HEIGHT / 8, MALLOC_CAP_DMA);
     memset(empty_bitmap, 0, SSD168X_WIDTH * SSD168X_HEIGHT / 8);
+    // Waveshare needs this RED init phase, CrowPanel doesn't.  Harmless in the latter case.  
     epaper_panel_set_bitmap_color(panel_handle, SSD1681_EPAPER_BITMAP_RED);
     esp_lcd_panel_draw_bitmap(panel_handle, 0, 0, SSD168X_WIDTH, SSD168X_HEIGHT, empty_bitmap);
     epaper_panel_set_bitmap_color(panel_handle, SSD1681_EPAPER_BITMAP_BLACK);
