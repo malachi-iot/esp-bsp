@@ -24,15 +24,13 @@
 #include "esp_lcd_ssd1681_commands.h"
 
 #define SSD1681_LUT_SIZE                   159
-#define SSD1681_EPD_1IN54_V2_WIDTH         200
-#define SSD1681_EPD_1IN54_V2_HEIGHT        200
 
 #define SSD1680_WIDTH                       176
 #define SSD1680_HEIGHT                      296
 #define SSD1681_WIDTH                       200
 #define SSD1681_HEIGHT                      200
 
-#if ESP_LCD_PANEL_SSD1680
+#if CONFIG_ESP_LCD_PANEL_SSD1680
 #define SSD168X_WIDTH   SSD1680_WIDTH
 #define SSD168X_HEIGHT  SSD1680_HEIGHT
 #else
@@ -296,7 +294,7 @@ esp_lcd_new_panel_ssd1681(const esp_lcd_panel_io_handle_t io, const esp_lcd_pane
     *ret_panel = &(epaper_panel->base);
     // --- Init framebuffer
     if (!(epaper_panel->_non_copy_mode)) {
-        epaper_panel->_framebuffer = heap_caps_malloc(SSD1681_EPD_1IN54_V2_WIDTH * SSD1681_EPD_1IN54_V2_HEIGHT / 8,
+        epaper_panel->_framebuffer = heap_caps_malloc(SSD168X_WIDTH * SSD168X_HEIGHT / 8,
                                      MALLOC_CAP_DMA);
         ESP_RETURN_ON_FALSE(epaper_panel->_framebuffer, ESP_ERR_NO_MEM, TAG, "epaper_panel_draw_bitmap allocating buffer memory err");
     }
@@ -593,7 +591,7 @@ static esp_err_t process_bitmap(esp_lcd_panel_t *panel, int len_x, int len_y, in
     if ((!(epaper_panel->_mirror_x)) && (!(epaper_panel->_mirror_y))) {
         if (!(epaper_panel->_non_copy_mode)) {
             if (epaper_panel->_swap_xy) {
-                memset(epaper_panel->_framebuffer, 0, 200 * 200 / 8);
+                memset(epaper_panel->_framebuffer, 0, SSD168X_WIDTH * SSD168X_HEIGHT / 8);
                 for (int i = 0; i < buffer_size * 8; i++) {
                     uint8_t bitmap_byte = ((uint8_t *) (color_data))[i / 8];
                     uint8_t bitmap_pixel = (bitmap_byte & (0x01 << (7 - (i % 8)))) ? 0x01 : 0x00;
@@ -608,7 +606,7 @@ static esp_err_t process_bitmap(esp_lcd_panel_t *panel, int len_x, int len_y, in
     }
     if ((!(epaper_panel->_mirror_x)) && (epaper_panel->_mirror_y)) {
         if (epaper_panel->_swap_xy) {
-            memset((epaper_panel->_framebuffer), 0, 200 * 200 / 8);
+            memset((epaper_panel->_framebuffer), 0, SSD168X_WIDTH * SSD168X_HEIGHT / 8);
             for (int i = 0; i < buffer_size * 8; i++) {
                 uint8_t bitmap_byte = ((uint8_t *) (color_data))[i / 8];
                 uint8_t bitmap_pixel = (bitmap_byte & (0x01 << (7 - (i % 8)))) ? 0x01 : 0x00;
@@ -623,7 +621,7 @@ static esp_err_t process_bitmap(esp_lcd_panel_t *panel, int len_x, int len_y, in
     if (((epaper_panel->_mirror_x)) && (!(epaper_panel->_mirror_y))) {
         if (!(epaper_panel->_non_copy_mode)) {
             if (epaper_panel->_swap_xy) {
-                memset((epaper_panel->_framebuffer), 0, 200 * 200 / 8);
+                memset((epaper_panel->_framebuffer), 0, SSD168X_WIDTH * SSD168X_HEIGHT / 8);
                 for (int i = 0; i < buffer_size * 8; i++) {
                     uint8_t bitmap_byte = ((uint8_t *) (color_data))[i / 8];
                     uint8_t bitmap_pixel = (bitmap_byte & (0x01 << (7 - (i % 8)))) ? 0x01 : 0x00;
@@ -638,7 +636,7 @@ static esp_err_t process_bitmap(esp_lcd_panel_t *panel, int len_x, int len_y, in
     }
     if (((epaper_panel->_mirror_x)) && (epaper_panel->_mirror_y)) {
         if (epaper_panel->_swap_xy) {
-            memset((epaper_panel->_framebuffer), 0, 200 * 200 / 8);
+            memset((epaper_panel->_framebuffer), 0, SSD168X_WIDTH * SSD168X_HEIGHT / 8);
             for (int i = 0; i < buffer_size * 8; i++) {
                 uint8_t bitmap_byte = ((uint8_t *) (color_data))[i / 8];
                 uint8_t bitmap_pixel = (bitmap_byte & (0x01 << (7 - (i % 8)))) ? 0x01 : 0x00;

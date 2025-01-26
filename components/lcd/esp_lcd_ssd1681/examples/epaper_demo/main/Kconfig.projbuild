@@ -4,13 +4,17 @@ menu "SSD1681 demo"
         prompt "target"
         default BOARD_WAVESHARE
 
-        config BOARD_WAVESHARE
-            bool "Waveshare v2"
+        if ESP_LCD_PANEL_SSD1681
+            config BOARD_WAVESHARE
+                bool "Waveshare v2"
+        endif
 
-        config BOARD_CROWPANEL
-            bool "CrowPanel 2.13inch"
-            help
-                Be sure to also specify SSD1680 in component config
+        if ESP_LCD_PANEL_SSD1680
+            config BOARD_CROWPANEL
+                bool "CrowPanel 2.13inch"
+                help
+                    Be sure to also specify SSD1680 in component config
+        endif
 
         config BOARD_CUSTOM
             bool "Custom"
