@@ -394,7 +394,11 @@ static esp_err_t epaper_panel_init(esp_lcd_panel_t *panel)
     panel_epaper_wait_busy(panel);
     // --- Driver Output Control
     ESP_RETURN_ON_ERROR(esp_lcd_panel_io_tx_param(epaper_panel->io, SSD1681_CMD_OUTPUT_CTRL,
+#if CONFIG_ESP_LCD_PANEL_SSD1680
+                        SSD1680_PARAM_OUTPUT_CTRL, 3), TAG, "SSD1681_CMD_OUTPUT_CTRL err");
+#else
                         SSD1681_PARAM_OUTPUT_CTRL, 3), TAG, "SSD1681_CMD_OUTPUT_CTRL err");
+#endif
 
     // --- Border Waveform Control
     ESP_RETURN_ON_ERROR(esp_lcd_panel_io_tx_param(epaper_panel->io, SSD1681_CMD_SET_BORDER_WAVEFORM, (uint8_t[]) {
