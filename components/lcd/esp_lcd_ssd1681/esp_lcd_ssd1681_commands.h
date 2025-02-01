@@ -105,3 +105,11 @@
 
 #define SSD1681_CMD_SLEEP_CTRL              0x10
 #define SSD1681_PARAM_SLEEP_MODE_1          0x01
+
+// 01FEB25 MB - Experimentation below this line
+
+// DEBT: Verify this is on 1681 also
+#define SSD1680_CMD_SET_GATE_SCAN_START     0x0F
+
+#define SSD1680_WS_VS(vs1, vs2, vs3, vs4)   \
+    ((vs1 << 6) | (vs2 << 4) | (vs3 << 2) | vs4)
